@@ -1,5 +1,33 @@
 import { fabric } from 'fabric';
 
+export const addRect = (canvas, setRect) => {
+    const testRect = new fabric.Rect({
+      height: 200,
+      width: 200,
+      fill: '#555555',
+      rx: 0,
+      ry: 0,
+      noScaleCache: false,
+    });
+    canvas.add(testRect);
+    setRect(testRect);
+}
+
+export const setUpRect = (canvas, rect) => {
+    addBrControllers(canvas, rect);
+    const shortSide = widerThanTall(rect) ? rect.width : rect.height
+    calculateBrControllerPositions(0.1, shortSide);
+    rect.on('scaling', (options) => {
+    rect.set({
+        width: rect.width * rect.scaleX,
+        height: rect.height * rect.scaleY,
+        scaleX: 1,
+        scaleY: 1
+    })
+    canvas.renderAll()
+    });
+}
+
 const addBorderRadiusControl = (canvas, rect, x,y) => new fabric.Control({
     x,
     y,

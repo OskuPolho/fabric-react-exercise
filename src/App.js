@@ -1,12 +1,13 @@
 import { useEffect, useState, useRef } from 'react';
 import { fabric } from 'fabric';
-import {addBrControllers, widerThanTall, calculateBrControllerPositions} from './calculations';
+import {addRect, setUpRect} from './canvasFunctions';
 import './App.css';
 
 function App() {
 
   const [canvas, setCanvas] = useState(null);
-  const [rect, setRectProperties] = useState()
+  const [canvasObjects, setCanvasObjects] = useState(null);
+  const [rect, setRect] = useState(null);
   
   const initCanvas = () => (
     new fabric.Canvas('c', {
@@ -14,53 +15,34 @@ function App() {
        width: 800,
        backgroundColor: '#aaaaaa'
     })
-    
   );
-
-  const addRect = () => {
-    const testRect = new fabric.Rect({
-      height: 200,
-      width: 200,
-      fill: '#555555',
-      rx: 0,
-      ry: 0,
-      noScaleCache: false,
-    });
-    setRectProperties(testRect);
-    canvas.add(testRect);
-  }
 
   useEffect(() => {
     const canvas = initCanvas();
-    canvas.on('after:render', () => {
+    canvas.on('mouse:up', () => {
+      setCanvasObjects(canvas.toObject().objects)
     })
+    addRect(canvas, setRect);
     setCanvas(canvas)
+    setCanvasObjects(canvas.toObject().objects)
   }, [])
 
   useEffect(() => { 
     if (rect) {
-      addBrControllers(canvas, rect);
-      const shortSide = widerThanTall(rect) ? rect.width : rect.height
-      calculateBrControllerPositions(0.1, shortSide);
-      rect.on('scaling', (options) => {
-        rect.set({
-          width: rect.width * rect.scaleX,
-          height: rect.height * rect.scaleY,
-          scaleX: 1,
-          scaleY: 1
-        })
-        canvas.renderAll()
-      });
+      setUpRect(canvas,rect);
     }
-  }, [rect])
+  }, [rect, canvas])
 
+  useEffect(() => {
+    // canvas object can be stored to redux
+    console.log('Save to redux');
+  }, [canvasObjects])
+  
   const canvasRef = useRef();
 
   return (
     <div className="App">
       <button onClick={() => {
-        addRect();
-        canvas.renderAll();
       }}>
         Add rectangle
       </button>
