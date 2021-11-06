@@ -42,10 +42,6 @@ function App() {
 
   return (
     <div className="App">
-      <button onClick={() => {
-      }}>
-        Add rectangle
-      </button>
       <canvas id="c" ref={canvasRef}/>
     </div>
   );
