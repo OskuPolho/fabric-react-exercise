@@ -48,7 +48,7 @@ const addBorderRadiusControl = (canvas, rect, x,y) => new fabric.Control({
     cornerSize: 5
   });
 
-export const addBrControllers = (canvas, rect) => {
+const addBrControllers = (canvas, rect) => {
     const controlCoords = {
       tl:{x: -0.5, y: -0.5},
       tr:{x: 0.5, y: -0.5},
@@ -67,17 +67,17 @@ export const addBrControllers = (canvas, rect) => {
     })
   }
 
-export const calculateControllerPosition = (multiplier, shortSide, pos) => {
+const calculateControllerPosition = (multiplier, shortSide, pos) => {
     const position = shortSide * multiplier
     return position * pos * -1
   }
 
-export const changeBorderRadius = (multiplier, shortSide) => {
+const changeBorderRadius = (multiplier, shortSide) => {
     const offSet = Math.cos(multiplier * Math.PI) * -0.1
     return shortSide * (multiplier + offSet) * 0.5
   }
 
-export const calculateBrControllerPositions = (multiplier, shortSide) => {
+const calculateBrControllerPositions = (multiplier, shortSide) => {
     Object.keys(fabric.Object.prototype.controls).forEach(control => {
       if (fabric.Object.prototype.controls[control].actionName === 'borderRadius') {
         fabric.Object.prototype.controls[control].offsetX = calculateControllerPosition(multiplier, shortSide, fabric.Object.prototype.controls[control].x)
@@ -86,7 +86,7 @@ export const calculateBrControllerPositions = (multiplier, shortSide) => {
     })
 }
   
-export const outOfBounds = (corner, ratio, direction) => {
+const outOfBounds = (corner, ratio, direction) => {
     if (direction === 'x') {
       if (corner === 'bRadiustr' || corner === 'bRadiusbr') {
         if (ratio > 0.9) return 1
@@ -110,11 +110,11 @@ export const outOfBounds = (corner, ratio, direction) => {
     }
   }
   
-export const widerThanTall = (rect) => {
+const widerThanTall = (rect) => {
     return rect.width < rect.height
   }
 
-  export const calculateSideToDistanceRatio = (rectangle, eventData, direction) => {
+  const calculateSideToDistanceRatio = (rectangle, eventData, direction) => {
     const cursor = direction === 'x' ? eventData.offsetX : eventData.offsetY;
     const midX = rectangle.left + (rectangle.width / 2);
     const midY = rectangle.top + (rectangle.height / 2);
@@ -125,7 +125,7 @@ export const widerThanTall = (rect) => {
     return distanceRatio
 }
 
-export const calculateBorderRadius = (canvas, rectangle, eventData, transform) => {
+const calculateBorderRadius = (canvas, rectangle, eventData, transform) => {
     const direction = widerThanTall(rectangle) ? 'x' : 'y'
     const ratio = calculateSideToDistanceRatio(rectangle, eventData, direction)
     const multiplier = 1 - Math.abs(ratio);
