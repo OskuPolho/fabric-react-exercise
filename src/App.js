@@ -62,8 +62,10 @@ function App() {
 
   return (
     <div className="App">
-      <button onClick={() => handleUndo(indexInHistory, history, setIndexInHistory)}>Undo</button>
-      <button onClick={() => handleRedo(indexInHistory, setIndexInHistory)}>Redo</button>
+      <div style={{width: '10%', display: 'flex', justifyContent: 'space-between', marginBottom: '30px'}}>
+        <button onClick={() => handleUndo(indexInHistory, history, setIndexInHistory)}>Undo</button>
+        <button onClick={() => handleRedo(indexInHistory, setIndexInHistory)}>Redo</button>
+      </div>
       <canvas id="c" ref={canvasRef}/>
     </div>
   );
