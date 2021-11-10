@@ -1,16 +1,21 @@
 import { fabric } from 'fabric';
 
-export const addRect = (canvas, setRect) => {
-    const testRect = new fabric.Rect({
-      height: 200,
-      width: 200,
-      fill: '#555555',
-      rx: 0,
-      ry: 0,
-      noScaleCache: false,
-    });
-    canvas.add(testRect);
-    setRect(testRect);
+export const addRect = (canvas, setRect, rect) => {
+    if (rect) {
+      const testRect = new fabric.Rect(rect);
+      canvas.add(testRect);
+      setRect(testRect);
+    } else {
+      const testRect = new fabric.Rect({
+        height: 200,
+        width: 200,
+        fill: '#555555',
+        rx: 0,
+        ry: 0,
+      });
+      canvas.add(testRect);
+      setRect(testRect);
+    }
 }
 
 export const setUpRect = (canvas, rect) => {
@@ -22,7 +27,8 @@ export const setUpRect = (canvas, rect) => {
         width: rect.width * rect.scaleX,
         height: rect.height * rect.scaleY,
         scaleX: 1,
-        scaleY: 1
+        scaleY: 1,
+        noScaleCache: false,
     })
     canvas.renderAll()
     });
@@ -36,7 +42,6 @@ const addBorderRadiusControl = (canvas, rect, x,y) => new fabric.Control({
     actionHandler: (eventData, target) => {
       calculateBorderRadius(canvas, rect, eventData, target)
     },
-    withConnection: false,
     render: (ctx, left, top) => {
       ctx.beginPath();
       ctx.arc(left, top, 5, 0, 6.28319);
